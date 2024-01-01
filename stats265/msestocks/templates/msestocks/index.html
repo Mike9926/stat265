@@ -1,0 +1,59 @@
+<!-- index.html -->
+
+{% extends 'msestocks/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to Stats265</h1>
+    <p class="lead">Your go-to platform for tracking prices from the Malawi Stock Exchange.</p>
+    <hr class="my-4">
+    <p>Explore the latest stock prices and stay informed.</p>
+</div>
+
+<div class="container mt-5">
+    <h1 class="mb-4">Stock List</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Open Price</th>
+                <th>Close Price</th>
+                <th>Percent Change</th>
+                <th>Volume</th>
+                <th>Turnover</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+            <tr>
+                <td>{{ stock.symbol }}</td>
+                <td>{{ stock.current_open_price }}</td>
+                <td>{{ stock.current_close_price }}</td>
+                <td>{{ stock.percent_change }}</td>
+                <td>{{ stock.current_volume }}</td>
+                <td>{{ stock.current_turnover }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Add more interesting content below -->
+<div class="container mt-5">
+    <h2>Recent News</h2>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Market Insights</h5>
+            <p class="card-text">Stay updated with the latest market insights and trends.</p>
+            <a href="#" class="btn btn-primary">Read More</a>
+        </div>
+    </div>
+
+    <!-- Add more cards or content as needed -->
+
+</div>
+
+{% endblock %}
