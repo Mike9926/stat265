@@ -5,6 +5,7 @@ from .models import Stock, HistoricalStockData
 from datetime import datetime
 from django.utils import timezone
 
+
 def update_stock_data():
     URL = 'https://mse.co.mw/market/mainboard'
     headers = {'User-Agent': 'Mozilla/5.0'}
@@ -33,8 +34,8 @@ def update_stock_data():
             turnover_str = cells[5].text.strip().replace(',', '') if len(cells) > 5 else ''
             turnover = float(turnover_str) if turnover_str else 0.0
 
-            # Get or create the Stock record
-            stock, created = Stock.objects.get_or_create(
+            # Update or create the Stock record
+            stock, created = Stock.objects.update_or_create(
                 symbol=symbol,
                 defaults={
                     'current_open_price': open_price,
@@ -43,7 +44,7 @@ def update_stock_data():
                     'current_volume': volume,
                     'current_turnover': turnover,
                 }
-            )
+            )#type: ignore
 
             # Create a HistoricalStockData record
             HistoricalStockData.objects.create(

@@ -14,10 +14,13 @@ class Stock(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
 
 class HistoricalStockData(models.Model):
-    stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
+    stock = models.ForeignKey(Stock, related_name='historical_data', on_delete=models.CASCADE)
     open_price = models.FloatField()
     close_price = models.FloatField()
     percent_change = models.FloatField()
     volume = models.IntegerField()
     turnover = models.FloatField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.stock.symbol} - {self.timestamp}"
