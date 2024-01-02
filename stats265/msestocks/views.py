@@ -5,7 +5,6 @@ from .models import Stock, HistoricalStockData
 from datetime import datetime
 from django.utils import timezone
 
-
 def update_stock_data():
     URL = 'https://mse.co.mw/market/mainboard'
     headers = {'User-Agent': 'Mozilla/5.0'}
@@ -34,27 +33,32 @@ def update_stock_data():
             turnover_str = cells[5].text.strip().replace(',', '') if len(cells) > 5 else ''
             turnover = float(turnover_str) if turnover_str else 0.0
 
-            # Update or create the Stock record
-            stock, created = Stock.objects.update_or_create(
-                symbol=symbol,
-                defaults={
-                    'current_open_price': open_price,
-                    'current_close_price': close_price,
-                    'percent_change': percent_change,
-                    'current_volume': volume,
-                    'current_turnover': turnover,
-                }
-            )#type: ignore
-
-            # Create a HistoricalStockData record
-            HistoricalStockData.objects.create(
-                stock=stock,
+            # Check if historical data with the same date and parameters exists
+            existing_data = HistoricalStockData.objects.filter(
+                stock__symbol=symbol,
+                timestamp__date=timezone.now().date(),
                 open_price=open_price,
                 close_price=close_price,
                 percent_change=percent_change,
                 volume=volume,
                 turnover=turnover,
-            )
+            ).first()
+
+            if existing_data:
+                # Update existing historical data
+                existing_data.save()
+            else:
+                # Create a new HistoricalStockData record
+                stock = Stock.objects.get(symbol=symbol)
+                HistoricalStockData.objects.create(
+                    stock=stock,
+                    date=timezone.now().date(),
+                    open_price=open_price,
+                    close_price=close_price,
+                    percent_change=percent_change,
+                    volume=volume,
+                    turnover=turnover,
+                )
 
     tfoot = soup.find('tfoot')
     if tfoot:

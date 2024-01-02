@@ -4,7 +4,7 @@ from .models import Stock, HistoricalStockData
 
 @admin.register(Stock)
 class StockAdmin(admin.ModelAdmin):
-    list_display = ('symbol', 'current_open_price', 'current_close_price', 'percent_change', 'current_volume', 'current_turnover', 'last_updated')
+    list_display = ('id', 'symbol', 'current_open_price', 'current_close_price', 'percent_change', 'current_volume', 'current_turnover', 'last_updated')
     list_filter = ('last_updated',)
     search_fields = ('symbol',)
     date_hierarchy = 'last_updated'
