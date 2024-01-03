@@ -52,7 +52,7 @@ def update_stock_data():
                 stock = Stock.objects.get(symbol=symbol)
                 HistoricalStockData.objects.create(
                     stock=stock,
-                    date=timezone.now().date(),
+                    timestamp=timezone.now().date(),
                     open_price=open_price,
                     close_price=close_price,
                     percent_change=percent_change,
