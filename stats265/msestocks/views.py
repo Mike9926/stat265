@@ -21,9 +21,8 @@ def update_stock_data():
             open_price = float(cells[1].text.replace(',', '').strip())
             close_price = float(cells[2].text.replace(',', '').strip())
 
-            # Handle the case where percent_change may contain a comma
-            percent_change_str = cells[3].text.strip().replace(',', '')
-            percent_change = float(percent_change_str) if percent_change_str else 0.0
+            # Calculate percentage change and round to two decimal places
+            percent_change = round(((close_price - open_price) / open_price) * 100, 2) if open_price != 0 else 0.0
 
             # Convert volume to float since it can have decimal points
             volume_str = cells[4].text.strip().replace(',', '')
