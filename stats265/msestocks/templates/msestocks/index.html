@@ -30,9 +30,9 @@
         <tbody>
             {% for stock in stocks %}
             <tr>
-                <td>{{ stock.symbol }}</td>
-                <td>{{ stock.current_open_price }}</td>
-                <td>{{ stock.current_close_price }}</td>
+                <td><a href="{% url 'msestocks:stock-detail' stock.id %}">{{ stock.symbol }}</a></td>
+                <td>{{ stock.current_open_price|floatformat:2 }}</td>
+                <td>{{ stock.current_close_price|floatformat:2 }}</td>
                 <td>{{ stock.percent_change }}</td>
                 <td>{{ stock.current_volume }}</td>
                 <td>{{ stock.current_turnover }}</td>

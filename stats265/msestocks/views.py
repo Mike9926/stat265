@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 import requests
 from bs4 import BeautifulSoup
 from .models import Stock, HistoricalStockData
@@ -33,31 +33,20 @@ def update_stock_data():
             turnover = float(turnover_str) if turnover_str else 0.0
 
             # Check if historical data with the same date and parameters exists
-            existing_data = HistoricalStockData.objects.filter(
-                stock__symbol=symbol,
+            stock = Stock.objects.get(symbol=symbol)
+            historical_data, created = HistoricalStockData.objects.get_or_create(
+                stock=stock,
                 timestamp__date=timezone.now().date(),
                 open_price=open_price,
                 close_price=close_price,
                 percent_change=percent_change,
                 volume=volume,
                 turnover=turnover,
-            ).first()
+            )
+            # Save the historical data if it already exists
+            if not created:
+                historical_data.save()
 
-            if existing_data:
-                # Update existing historical data
-                existing_data.save()
-            else:
-                # Create a new HistoricalStockData record
-                stock = Stock.objects.get(symbol=symbol)
-                HistoricalStockData.objects.create(
-                    stock=stock,
-                    timestamp=timezone.now().date(),
-                    open_price=open_price,
-                    close_price=close_price,
-                    percent_change=percent_change,
-                    volume=volume,
-                    turnover=turnover,
-                )
 
     tfoot = soup.find('tfoot')
     if tfoot:
@@ -74,3 +63,12 @@ def stock_list(request):
     # Fetch stock data from the database
     stocks = Stock.objects.all()
     return render(request, 'msestocks/index.html', {'stocks': stocks})
+
+#stock detail view
+def stock_detail(request, id):
+    # Get the stock object or return a 404 error if not found
+    stock = get_object_or_404(Stock, id=id)
+    # Render the stock_detail.html template with the stock object as a context variable
+    return render(request, 'msestocks/stock_detail.html', {'stock': stock})
+     
+    
