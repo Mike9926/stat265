@@ -1,9 +1,12 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.serializers import serialize
 import requests
 from bs4 import BeautifulSoup
 from .models import Stock, HistoricalStockData
 from datetime import datetime
 from django.utils import timezone
+from django.http import JsonResponse
+from django.db.models import F, ExpressionWrapper, fields, Func
 
 def update_stock_data():
     URL = 'https://mse.co.mw/market/mainboard'
@@ -65,10 +68,32 @@ def stock_list(request):
     return render(request, 'msestocks/index.html', {'stocks': stocks})
 
 #stock detail view
+
+
+
+class TruncMinute(Func):
+    function = 'DATE'
+    template = '%(function)s(%(expressions)s)'
+    output_field = fields.DateTimeField()
+
+class TruncHour(Func):
+    function = 'TIME'
+    template = '%(function)s(%(expressions)s)'
+    output_field = fields.DateTimeField()
+
+
+
 def stock_detail(request, id):
-    # Get the stock object or return a 404 error if not found
     stock = get_object_or_404(Stock, id=id)
-    # Render the stock_detail.html template with the stock object as a context variable
-    return render(request, 'msestocks/stock_detail.html', {'stock': stock})
-     
-    
+
+    # Serialize historical_data to JSON with formatted timestamp
+    historical_data = serialize('json', stock.historical_data.annotate(
+        formatted_timestamp=TruncMinute('timestamp')
+    ), fields=('formatted_timestamp', 'close_price'))
+
+    context = {
+        'stock': stock,
+        'historical_data': historical_data,
+    }
+
+    return render(request, 'msestocks/stock_detail.html', context)

@@ -8,9 +8,9 @@
 
 <div class="container mt-5">
     <h1 class="mb-4">{{ stock.name }}</h1>
-    <p>{{ stock.description }}</p>
-    <p>Category: {{ stock.category }}</p>
     <h2 class="mt-4">Historical Data</h2>
+   
+    <a href="{% url 'msestocks:index' %}" class="btn btn-primary">Back to Stock List</a>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -25,18 +25,86 @@
         <tbody>
             {% for data in stock.historical_data.all %}
             <tr>
-                <td>{{ data.timestamp }}</td>
-                <td>{{ data.open_price }}</td>
-                <td>{{ data.close_price }}</td>
-                <td>{{ data.percent_change }}</td>
-                <td>{{ data.volume }}</td>
-                <td>{{ data.turnover }}</td>
+                <td>{{ data.timestamp|date:"d/m/Y" }}</td>
+                <td>{{ data.open_price|floatformat:2 }}</td>
+                <td>{{ data.close_price|floatformat:2 }}</td>
+                <td>{{ data.percent_change|floatformat:2 }}</td>
+                <td>{{ data.volume}}</td>
+                <td>{{ data.turnover}}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'msestocks:index' %}" class="btn btn-primary mt-3">Back to Stock List</a>
 </div>
 
+<canvas id="stock-chart" width="500" height="300"></canvas>
+
+<!-- Include the moment.js and chartjs-adapter-moment scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+<script>
+  // Define a function to fetch and parse the historical data
+  function getHistoricalData() {
+    // Get the historical data from the context variable
+    let historicalData = JSON.parse("{{ historical_data|escapejs }}");
+    // Initialize empty arrays for labels and values
+    let labels = [];
+    let values = [];
+    // Loop through the historical data and push the formatted timestamp and close price to the arrays
+    for (let data of historicalData) {
+      labels.push(data.fields.formatted_timestamp);
+      values.push(data.fields.close_price);
+    }
+    // Return the arrays as an object
+    return {
+      labels: labels,
+      values: values
+    };
+  }
+
+  // Define a function to create and display the chart
+  function createChart() {
+    // Get the canvas element by id
+    let ctx = document.getElementById("stock-chart").getContext("2d");
+    // Get the historical data by calling the previous function
+    let historicalData = getHistoricalData();
+    // Create a new Chart.js instance and pass the data and options
+    let chart = new Chart(ctx, {
+      type: "line", // You can change the type to bar, area, etc.
+      data: {
+        labels: historicalData.labels, // The labels array
+        datasets: [{
+          label: "{{ stock.name }} Close Price", // The label for the dataset
+          backgroundColor: "#79AEC8", // The background color for the dataset
+          borderColor: "#417690", // The border color for the dataset
+          data: historicalData.values, // The values array
+          fill: false // Whether to fill the area under the line
+        }]
+      },
+      options: {
+        title: {
+          text: "Stock Price Trend", // The title for the chart
+          display: true // Whether to display the title
+        },
+        scales: {
+          x: { // Use an object instead of an array for the x-axis configuration
+            type: "time", // The type of the x-axis
+            time: {
+              unit: "day", // The unit of the x-axis
+              parser: "DD/MM/YYYY" // The format of the labels
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Call the createChart() function when the document is ready
+  $(document).ready(function() {
+    createChart();
+  });
+</script>
 
 {% endblock %}
