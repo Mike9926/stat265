@@ -7,6 +7,7 @@ from datetime import datetime
 from django.utils import timezone
 from django.http import JsonResponse
 from django.db.models import F, ExpressionWrapper, fields, Func
+from django.db.models.functions import TruncMinute
 
 def update_stock_data():
     URL = 'https://mse.co.mw/market/mainboard'
@@ -50,6 +51,7 @@ def update_stock_data():
             if not created:
                 historical_data.save()
 
+  
 
     tfoot = soup.find('tfoot')
     if tfoot:
@@ -71,15 +73,15 @@ def stock_list(request):
 
 
 
-class TruncMinute(Func):
-    function = 'DATE'
+#class TruncMinute(Func):
+    function = 'DATETIME'
     template = '%(function)s(%(expressions)s)'
     output_field = fields.DateTimeField()
 
-class TruncHour(Func):
-    function = 'TIME'
-    template = '%(function)s(%(expressions)s)'
-    output_field = fields.DateTimeField()
+#class TruncHour(Func):
+    #function = 'TIME'
+    #template = '%(function)s(%(expressions)s)'
+    #output_field = fields.DateTimeField()
 
 
 
@@ -87,9 +89,7 @@ def stock_detail(request, id):
     stock = get_object_or_404(Stock, id=id)
 
     # Serialize historical_data to JSON with formatted timestamp
-    historical_data = serialize('json', stock.historical_data.annotate(
-        formatted_timestamp=TruncMinute('timestamp')
-    ), fields=('formatted_timestamp', 'close_price'))
+    historical_data = serialize('json', stock.historical_data.all(), fields=('timestamp', 'close_price'))
 
     context = {
         'stock': stock,
@@ -97,3 +97,4 @@ def stock_detail(request, id):
     }
 
     return render(request, 'msestocks/stock_detail.html', context)
+   

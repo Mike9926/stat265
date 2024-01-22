@@ -70,9 +70,15 @@
     let labels = [];
     let values = [];
     for (let data of historicalData) {
-      labels.push(data.fields.formatted_timestamp);
+      let timestamp = new Date(data.fields.timestamp)
+      let formattedDate = timestamp.toLocaleDateString();
+
+      labels.push(formattedDate);
       values.push(data.fields.close_price);
     }
+
+    console.log("Labels:", labels);
+    console.log("Values:", values);
     return {
       labels: labels,
       values: values
@@ -115,6 +121,7 @@
   $(document).ready(function() {
     createChart();
   });
+
 </script>
 
 {% endblock %}
