@@ -6,7 +6,7 @@ from .models import Stock, HistoricalStockData
 from datetime import datetime
 from django.utils import timezone
 from django.http import JsonResponse
-from django.db.models import F, ExpressionWrapper, fields, Func
+from django.db.models import fields
 
 
 def update_stock_data():
