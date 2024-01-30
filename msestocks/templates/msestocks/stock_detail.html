@@ -1,0 +1,127 @@
+<!-- stock_detail.html -->
+{% extends 'msestocks/base.html' %}
+
+{% block title %}Stock Detail{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h1 class="mb-4">{{ stock.name }}</h1>
+    <h2 class="mt-4">Historical Data</h2>
+
+    <a href="{% url 'msestocks:index' %}" class="btn btn-primary mb-3">Back to Stock List</a>
+
+    <div class="row">
+        <div class="col-md-4 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Stock Details</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Name: {{ stock.symbol }}</p>
+                    <p class="card-text">Current Close Price: {{ stock.current_close_price|floatformat:2 }}</p>
+                    <p class="card-text">Last Traded Volume: {{ stock.current_volume }}</p>
+                    <p class="card-text">Current Turnover: {{ stock.current_turnover|floatformat:2 }}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text text-center">Last updated: {{ stock.last_updated|date:"d/m/Y H:i" }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 col-sm-12">
+            <canvas id="stock-chart" width="500" height="300" class="mt-4"></canvas>
+        </div>
+    </div>
+
+    <table class="table table-striped d-md-none">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Open Price</th>
+                <th>Close Price</th>
+                <th>Percent Change</th>
+                <th>Volume</th>
+                <th>Turnover</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in stock.historical_data.all %}
+            <tr>
+                <td>{{ data.timestamp|date:"d/m/Y" }}</td>
+                <td>{{ data.open_price|floatformat:2 }}</td>
+                <td>{{ data.close_price|floatformat:2 }}</td>
+                <td>{{ data.percent_change|floatformat:2 }}</td>
+                <td>{{ data.volume}}</td>
+                <td>{{ data.turnover}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Include the moment.js and chartjs-adapter-moment scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+<script>
+  function getHistoricalData() {
+    let historicalData = JSON.parse("{{ historical_data|escapejs }}");
+    let labels = [];
+    let values = [];
+    for (let data of historicalData) {
+      let timestamp = new Date(data.fields.timestamp)
+      let formattedDate = timestamp.toLocaleDateString();
+
+      labels.push(formattedDate);
+      values.push(data.fields.close_price);
+    }
+
+    console.log("Labels:", labels);
+    console.log("Values:", values);
+    return {
+      labels: labels,
+      values: values
+    };
+  }
+
+  function createChart() {
+    let ctx = document.getElementById("stock-chart").getContext("2d");
+    let historicalData = getHistoricalData();
+    let chart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: historicalData.labels,
+        datasets: [{
+          label: "{{ stock.name }} Close Price",
+          backgroundColor: "#79AEC8",
+          borderColor: "#417690",
+          data: historicalData.values,
+          fill: false
+        }]
+      },
+      options: {
+        title: {
+          text: "Stock Price Trend",
+          display: true
+        },
+        scales: {
+          x: {
+            type: "time",
+            time: {
+              unit: "day",
+              parser: "DD/MM/YYYY"
+            }
+          }
+        }
+      }
+    });
+  }
+
+  $(document).ready(function() {
+    createChart();
+  });
+
+</script>
+
+{% endblock %}

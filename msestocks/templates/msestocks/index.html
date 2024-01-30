@@ -1,0 +1,57 @@
+<!-- index.html -->
+
+{% extends 'msestocks/base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<section id="hero" class="hero d-flex align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 d-flex flex-column justify-content-center align-items-center pt-4 pt-lg-0 order-2 order-lg-1 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+          <h1 class="mb-4" style="color: ; font-weight: bold; font-size: 2.5rem;">Welcome to Stats265</h1>
+          <h3 style="color: white; font-size: 1.5rem;">Stats265 is your go-to platform for accessing a wide range of statistical data for comprehensive and up-to-date information on various aspects of Malawi.</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+<div class="container mt-4">
+    <p>Explore the latest stock prices and stay informed.</p>  
+</div>
+
+<div class="container mt-5">
+    <h1 class="mb-4">Stock List</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Open Price</th>
+                <th>Close Price</th>
+                <th>Percent Change</th>
+                <th>Volume</th>
+                <th>Turnover</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+            <tr>
+                <td><a href="{% url 'msestocks:stock-detail' stock.id %}">{{ stock.symbol }}</a></td>
+                <td>{{ stock.current_open_price|floatformat:2 }}</td>
+                <td>{{ stock.current_close_price|floatformat:2 }}</td>
+                <td>{{ stock.percent_change }}</td>
+                <td>{{ stock.current_volume }}</td>
+                <td>{{ stock.current_turnover }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+</div>
+
+{% endblock %}
