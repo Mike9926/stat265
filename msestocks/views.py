@@ -7,7 +7,7 @@ from datetime import datetime
 from django.utils import timezone
 from django.http import JsonResponse
 from django.db.models import F, ExpressionWrapper, fields, Func
-from django.db.models.functions import TruncMinute
+
 
 def update_stock_data():
     URL = 'https://mse.co.mw/market/mainboard'
