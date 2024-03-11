@@ -6,3 +6,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         update_stock_data()
+
