@@ -1,9 +1,10 @@
-
 #hero {
-    height: 70vh;
+    height: 80vh;
     background-image: url("/static/msestocks/images/stats.png");
     background-size: cover;
+    background-position: center;
     color: rgb(229 38 38);
     text-align: center;
-    
+    text-shadow: 2px 2px 4px #000000;
 }
+
