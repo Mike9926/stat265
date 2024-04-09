@@ -2,34 +2,20 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Stats265{% endblock %}</title>
-
-    <style>
-        #hero {
-            height: 70vh;
-            background-image: url("{% static 'msestocks/images/index_banner (1).png' %}");
-            background-size: cover;
-            background-position: center;
-            background-color: rgba(0, 0, 0, 0.5); /* Adjust the alpha value (0.5) to change the transparency */
-            color: white;
-            text-align: center;
-        }
-    </style>        
-</head>
-<body>
-
-</head>
-<body>
-
+    <link rel="stylesheet" href="{% static 'msestocks/css/styles.css' %}"> 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'msestocks/css/styles.css' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+    
 </head>
+<body>
+<body>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
