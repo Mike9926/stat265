@@ -16,5 +16,8 @@ Welcome to Stats265, a project dedicated to simplifying access to essential data
 
 - **Collaboration and Growth:** Welcoming contributions and collaborations from individuals and organizations to enhance the platform's data coverage and analytical capabilities.
 
+![Screenshot](https://drive.google.com/uc?id=1sPX2essfU4WokLZ0ohRZZpBvSAZ70as_)
 
 ![Screenshot](https://drive.google.com/uc?id=1V90ZcP6ZHALPxAhJsomiyNzE3Lzo21GC)
+
+![Screenshot](https://drive.google.com/uc?id=1HI0GmmOsWJV1UDo6ZOjG8PO7-4jntCch)
