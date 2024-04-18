@@ -16,5 +16,4 @@ Welcome to Stats265, a project dedicated to simplifying access to essential data
 
 - **Collaboration and Growth:** Welcoming contributions and collaborations from individuals and organizations to enhance the platform's data coverage and analytical capabilities.
 
-//insert pictures
-![Image Description](static/msestocks/images/Screenshot from 2024-04-18 21-43-42.png)
+(static/msestocks/images/Screenshot from 2024-04-18 21-43-42.png)
