@@ -1,57 +1,151 @@
-<!-- index.html -->
 {% extends 'msestocks/base.html' %}
 {% load static %}
 {% block title %}Home{% endblock %}
 
 {% block content %}
-
-<section id="hero" class="hero d-flex align-items-center">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 d-flex flex-column justify-content-center align-items-center pt-4 pt-lg-0 order-2 order-lg-1 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
-          <h1 class="mb-4" style="color: ; font-weight: bold; font-size: 2.5rem;">Welcome to Stats265</h1>
-          <h3 style="color: white; font-size: 1.5rem;
-          9">Stats265 is your go-to platform for accessing a wide range of statistical data for comprehensive and up-to-date information on various aspects of Malawi.</h3>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
 <div class="container mt-4">
-    <p>Explore the latest stock prices and stay informed.</p>  
+    <h1 class="mb-4">Market Overview</h1>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Stock Prices</h5>
+                    <canvas id="marketChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Watchlist</h5>
+                    <ul class="list-group">
+                        {% for stock in watchlist_stocks %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{% url 'msestocks:stock-detail' stock.id %}">{{ stock.symbol }}</a>
+                            <span class="badge {% if stock.percent_change > 0 %}badge-success{% else %}badge-danger{% endif %} badge-pill">
+                                {% if stock.percent_change > 0 %}↑{% else %}↓{% endif %}{{ stock.percent_change }}%
+                            </span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="mb-4">Market Trends</h2>
+    <ul class="nav nav-tabs" id="marketTrendsTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="actives-tab" data-toggle="tab" href="#actives" role="tab" aria-controls="actives" aria-selected="true">Actives</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="gainers-tab" data-toggle="tab" href="#gainers" role="tab" aria-controls="gainers" aria-selected="false">Gainers</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="losers-tab" data-toggle="tab" href="#losers" role="tab" aria-controls="losers" aria-selected="false">Losers</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="watchlist-tab" data-toggle="tab" href="#watchlist" role="tab" aria-controls="watchlist" aria-selected="false">Watchlist</a>
+        </li>
+    </ul>
+    <div class="tab-content mt-3" id="marketTrendsContent">
+        <div class="tab-pane fade show active" id="actives" role="tabpanel" aria-labelledby="actives-tab">
+            <div class="row">
+                {% for stock in actives_stocks %}
+                <div class="col-md-3 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ stock.symbol }}</h5>
+                            <p class="card-text">{{ stock.name }}</p>
+                            <p class="{% if stock.percent_change > 0 %}text-success{% else %}text-danger{% endif %}">{{ stock.percent_change }}%</p>
+                            <p class="card-text">{{ stock.current_close_price|floatformat:2 }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="tab-pane fade" id="gainers" role="tabpanel" aria-labelledby="gainers-tab">
+            <div class="row">
+                {% for stock in gainers_stocks %}
+                <div class="col-md-3 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ stock.symbol }}</h5>
+                            <p class="card-text">{{ stock.name }}</p>
+                            <p class="text-success">{{ stock.percent_change }}%</p>
+                            <p class="card-text">{{ stock.current_close_price|floatformat:2 }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="tab-pane fade" id="losers" role="tabpanel" aria-labelledby="losers-tab">
+            <div class="row">
+                {% for stock in losers_stocks %}
+                <div class="col-md-3 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ stock.symbol }}</h5>
+                            <p class="card-text">{{ stock.name }}</p>
+                            <p class="text-danger">{{ stock.percent_change }}%</p>
+                            <p class="card-text">{{ stock.current_close_price|floatformat:2 }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="tab-pane fade" id="watchlist" role="tabpanel" aria-labelledby="watchlist-tab">
+            <div class="row">
+                {% for stock in watchlist_stocks %}
+                <div class="col-md-3 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ stock.symbol }}</h5>
+                            <p class="card-text">{{ stock.name }}</p>
+                            <p class="{% if stock.percent_change > 0 %}text-success{% else %}text-danger{% endif %}">{{ stock.percent_change }}%</p>
+                            <p class="card-text">{{ stock.current_close_price|floatformat:2 }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="container mt-5">
-    <h1 class="mb-4">Stock List</h1>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Symbol</th>
-                <th>Open Price</th>
-                <th>Close Price</th>
-                <th>Percent Change</th>
-                <th>Volume</th>
-                <th>Turnover</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for stock in stocks %}
-            <tr>
-                <td><a href="{% url 'msestocks:stock-detail' stock.id %}">{{ stock.symbol }}</a></td>
-                <td>{{ stock.current_open_price|floatformat:2 }}</td>
-                <td>{{ stock.current_close_price|floatformat:2 }}</td>
-                <td>{{ stock.percent_change }}</td>
-                <td>{{ stock.current_volume }}</td>
-                <td>{{ stock.current_turnover }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-
-
-</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('marketChart').getContext('2d');
+        const marketChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [/* your labels here */],
+                datasets: [{
+                    label: 'Stock Prices',
+                    data: [/* your data here */],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
 
 {% endblock %}

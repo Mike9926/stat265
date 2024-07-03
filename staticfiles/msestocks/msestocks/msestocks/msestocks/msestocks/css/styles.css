@@ -1,0 +1,86 @@
+body {
+    background-color: #1e1e2f;
+    color: #cfd3dc;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #cfd3dc;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #ffffff;
+}
+
+.navbar-brand-custom img {
+    filter: brightness(0) invert(1);
+}
+
+.top-bar {
+    background-color: #2b2b3d;
+    color: #ffffff;
+}
+
+.popular-stocks span {
+    margin-right: 15px;
+    font-size: 1rem;
+}
+
+.popular-stocks .text-success {
+    color: #4caf50 !important;
+}
+
+.popular-stocks .text-danger {
+    color: #f44336 !important;
+}
+
+.search-bar input {
+    width: 300px;
+    margin-left: 15px;
+    background-color: #3a3f51;
+    border: none;
+    color: #ffffff;
+}
+
+.search-bar input::placeholder {
+    color: #cfd3dc;
+}
+
+.card {
+    background-color: #2b2b3d;
+    color: #cfd3dc;
+    border: none;
+}
+
+.card-title {
+    color: #ffffff;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #2b2b3d;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #232332;
+}
+
+.table thead th {
+    border-bottom: 1px solid #454d55;
+    color: #cfd3dc;
+}
+
+.table tbody td {
+    border-top: 1px solid #454d55;
+}
+
+.badge-success {
+    background-color: #4caf50;
+}
+
+.badge-danger {
+    background-color: #f44336;
+}
+
+#marketChart {
+    background-color: #1e1e2f;
+    border-radius: 5px;
+}

@@ -1,18 +1,15 @@
-<!-- base.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Stats265{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'msestocks/css/styles.css' %}"> 
+    <link rel="stylesheet" href="{% static 'msestocks/css/styles.css' %}">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
-    
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -26,7 +23,6 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <!-- Use btn class along with nav-link for a button appearance -->
                         <a class="nav-link btn btn-success btn-sm" href="#">Skills & Courses</a>
                     </li>
                     <li class="nav-item">
@@ -38,7 +34,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Insights</a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" href="#">Services</a>
                     </li>
@@ -49,16 +44,30 @@
             </div>
         </div>
     </nav>
-    
-    
 
+    <div class="top-bar bg-primary text-white py-2">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="popular-stocks">
+                {% for stock in popular_stocks %}
+                <span>{{ stock.symbol }} 
+                    <span class="{% if stock.percent_change > 0 %}text-success{% else %}text-danger{% endif %}">
+                        {% if stock.percent_change > 0 %}↑{% else %}↓{% endif %}{{ stock.percent_change }}%
+                    </span>
+                </span>
+                {% endfor %}
+            </div>
+            <div class="search-bar">
+                <input type="text" class="form-control" placeholder="Search stocks, ETFs, & more">
+            </div>
+        </div>
+    </div>
 
-{% block content %}{% endblock %}
-<!-- Bootstrap JS and Popper.js (optional) -->
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.min.js"></script>
-
-
+    <!-- Bootstrap JS and Popper.js (optional) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.min.js"></script>
 </body>
 </html>

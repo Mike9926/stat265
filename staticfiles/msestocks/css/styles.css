@@ -1,0 +1,141 @@
+/* Universal styles to ensure background and text colors are applied globally */
+html, body {
+    background-color: #1e1e2f;
+    color: #cfd3dc;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #cfd3dc;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #ffffff;
+}
+
+.navbar-brand-custom img {
+    filter: brightness(0) invert(1);
+}
+
+.top-bar {
+    background-color: #2b2b3d;
+    color: #ffffff;
+}
+
+.popular-stocks span {
+    margin-right: 15px;
+    font-size: 1rem;
+    color: #ffffff;
+}
+
+.popular-stocks .text-success {
+    color: #4caf50 !important;
+}
+
+.popular-stocks .text-danger {
+    color: #f44336 !important;
+}
+
+.search-bar input {
+    width: 300px;
+    margin-left: 15px;
+    background-color: #3a3f51;
+    border: none;
+    color: #ffffff;
+}
+
+.search-bar input::placeholder {
+    color: #cfd3dc;
+}
+
+.card {
+    background-color: #2b2b3d;
+    color: #cfd3dc;
+    border: none;
+}
+
+.card-title {
+    color: #ffffff;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #2b2b3d;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #232332;
+}
+
+.table thead th {
+    border-bottom: 1px solid #454d55;
+    color: #cfd3dc;
+}
+
+.table tbody td {
+    border-top: 1px solid #454d55;
+    color: #cfd3dc;
+}
+
+.badge-success {
+    background-color: #4caf50;
+}
+
+.badge-danger {
+    background-color: #f44336;
+}
+
+#marketChart {
+    background-color: #1e1e2f;
+    border-radius: 5px;
+}
+
+/* Ensure all text is clear */
+h1, h2, h3, h4, h5, h6, p, a, span, div, li {
+    color: #cfd3dc;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.navbar-brand-custom {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand-custom img {
+    filter: invert(100%);
+}
+
+.top-bar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.popular-stocks span {
+    display: inline-block;
+    margin-right: 15px;
+    font-size: 1rem;
+    color: #ffffff; /* Ensure text is white */
+}
+
+.search-bar input {
+    background-color: #3a3f51;
+    border: none;
+    color: #ffffff;
+    padding: 5px 10px;
+}
+
+.search-bar input::placeholder {
+    color: #cfd3dc;
+}

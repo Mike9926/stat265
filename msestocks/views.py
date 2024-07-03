@@ -19,39 +19,28 @@ def update_stock_data():
     for row in table_body.find_all('tr'):
         cells = row.find_all('td')
 
-        # Check if there are at least 6 columns in the row
         if len(cells) >= 6:
             symbol = cells[0].text.strip()
             open_price = float(cells[1].text.replace(',', '').strip())
             close_price = float(cells[2].text.replace(',', '').strip())
-
-            # Calculate percentage change and round to two decimal places
             percent_change = round(((close_price - open_price) / open_price) * 100, 2) if open_price != 0 else 0.0
-
-            # Convert volume to float since it can have decimal points
             volume_str = cells[4].text.strip().replace(',', '')
             volume = float(volume_str) if volume_str else 0.0
-
-            # Check if the index 5 exists before accessing
             turnover_str = cells[5].text.strip().replace(',', '') if len(cells) > 5 else ''
             turnover = float(turnover_str) if turnover_str else 0.0
 
-            # Check if historical data with the same date and parameters exists
-            stock = Stock.objects.get(symbol=symbol)
-            historical_data, created = HistoricalStockData.objects.get_or_create(
+            stock, created = Stock.objects.get_or_create(symbol=symbol)
+            HistoricalStockData.objects.get_or_create(
                 stock=stock,
                 timestamp__date=timezone.now().date(),
-                open_price=open_price,
-                close_price=close_price,
-                percent_change=percent_change,
-                volume=volume,
-                turnover=turnover,
+                defaults={
+                    'open_price': open_price,
+                    'close_price': close_price,
+                    'percent_change': percent_change,
+                    'volume': volume,
+                    'turnover': turnover,
+                }
             )
-            # Save the historical data if it already exists
-            if not created:
-                historical_data.save()
-
-  
 
     tfoot = soup.find('tfoot')
     if tfoot:
@@ -61,34 +50,32 @@ def update_stock_data():
             timestamp = datetime.strptime(timestamp_str, '%d/%m/%Y %H:%M%p')
             Stock.objects.update(last_updated=timestamp)
 
+
 def stock_list(request):
-    # Update stock data before rendering the template
     update_stock_data()
 
     # Fetch stock data from the database
     stocks = Stock.objects.all()
-    return render(request, 'msestocks/index.html', {'stocks': stocks})
+    popular_stocks = stocks[:5]  # Adjust as necessary to get the popular stocks
+    actives_stocks = stocks[:4]  # Placeholder, replace with actual logic
+    gainers_stocks = stocks.filter(percent_change__gt=0)[:4]
+    losers_stocks = stocks.filter(percent_change__lt=0)[:4]
+    watchlist_stocks = stocks[:4]  # Placeholder, replace with actual logic
 
-#stock detail view
+    context = {
+        'stocks': stocks,
+        'popular_stocks': popular_stocks,
+        'actives_stocks': actives_stocks,
+        'gainers_stocks': gainers_stocks,
+        'losers_stocks': losers_stocks,
+        'watchlist_stocks': watchlist_stocks,
+    }
 
-
-
-#class TruncMinute(Func):
-    function = 'DATETIME'
-    template = '%(function)s(%(expressions)s)'
-    output_field = fields.DateTimeField()
-
-#class TruncHour(Func):
-    #function = 'TIME'
-    #template = '%(function)s(%(expressions)s)'
-    #output_field = fields.DateTimeField()
-
+    return render(request, 'msestocks/index.html', context)
 
 
 def stock_detail(request, id):
     stock = get_object_or_404(Stock, id=id)
-
-    # Serialize historical_data to JSON with formatted timestamp
     historical_data = serialize('json', stock.historical_data.all(), fields=('timestamp', 'close_price'))
 
     context = {
@@ -97,4 +84,3 @@ def stock_detail(request, id):
     }
 
     return render(request, 'msestocks/stock_detail.html', context)
-   
