@@ -1,6 +1,6 @@
 #hero {
     height: 80vh;
-    background-image: url("/static/msestocks/images/stats.png");
+    background-color: #001327;
     background-size: cover;
     background-position: center;
     color: rgb(229 38 38);
