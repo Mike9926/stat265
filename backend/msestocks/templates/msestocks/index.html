@@ -1,0 +1,113 @@
+{% extends 'msestocks/base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero d-flex align-items-center" style="background-image: url('{% static "msestocks/images/hero-bg.jpg" %}');">
+    <div class="container text-white">
+        <div class="row">
+            <div class="col-lg-7">
+                <h1 class="hero-title">Unlock Malawi's Financial Potential. Seamlesmly</h1>
+                <p class="hero-sub">Discover a fully digital platform designed for local and international investors. Track, manage, and grow wealth with unprecedented ease.</p>
+                <div class="hero-cta">
+                    <a href="#" class="btn btn-primary btn-lg me-2">Explore the MSE (Guest View)</a>
+                    <a href="#" class="btn btn-outline-light btn-lg">Start Your Portfolio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-overlay"></div>
+</section>
+
+<!-- SERVICES CARDS -->
+<section class="services py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="service-card animated-card">
+                    <div class="service-icon">📈</div>
+                    <h3>Invest</h3>
+                    <p>Open and manage investments on the Malawi Stock Exchange with powerful tools and insights.</p>
+                    <a class="btn btn-sm btn-outline-primary" href="#">Learn more</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card animated-card">
+                    <div class="service-icon">🧭</div>
+                    <h3>Track</h3>
+                    <p>Real-time tracking of portfolios, watchlists, and market movements with smart alerts.</p>
+                    <a class="btn btn-sm btn-outline-primary" href="#">Learn more</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card animated-card">
+                    <div class="service-icon">🔒</div>
+                    <h3>Secure</h3>
+                    <p>Bank-grade security and compliance to protect your assets and personal data.</p>
+                    <a class="btn btn-sm btn-outline-primary" href="#">Learn more</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MARKET BANNER -->
+<section class="market-banner py-4">
+    <div class="container d-flex align-items-center justify-content-between">
+        <div class="market-left">
+            <div class="market-index">MSE Live</div>
+            <div class="market-value">85,460.23 <span class="text-success">+0.85%</span></div>
+        </div>
+        <div class="market-chart">
+            <canvas id="miniMarketChart" width="400" height="80"></canvas>
+        </div>
+        <div class="market-right d-flex gap-4">
+            <div class="gainers">
+                <div class="small">Top Gainers</div>
+                <ul class="list-unstyled mb-0">
+                    <li>TNA <span class="text-success">+3.20%</span></li>
+                    <li>NNL <span class="text-success">+2.10%</span></li>
+                </ul>
+            </div>
+            <div class="losers">
+                <div class="small">Top Losers</div>
+                <ul class="list-unstyled mb-0">
+                    <li>ABC <span class="text-danger">-1.22%</span></li>
+                    <li>XYZ <span class="text-danger">-0.87%</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Minimal script to draw mini chart -->
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const ctx = document.getElementById('miniMarketChart')?.getContext('2d');
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 20}, (_,i)=>i),
+                datasets: [{
+                    data: Array.from({length:20}, ()=> Math.random()*10+80),
+                    borderColor: '#9be7ff',
+                    backgroundColor: 'rgba(155,231,255,0.08)',
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {legend:{display:false}},
+                scales: {x:{display:false}, y:{display:false}}
+            }
+        });
+    }
+});
+</script>
+
+{% endblock %}

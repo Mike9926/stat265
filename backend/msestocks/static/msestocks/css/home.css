@@ -1,0 +1,41 @@
+/* Styles for the home hero, service cards and market banner */
+.hero{
+  position:relative;
+  background-size:cover;
+  background-position:center;
+  padding:80px 0;
+  border-radius:8px;
+  overflow:hidden;
+}
+.hero-overlay{
+  position:absolute;inset:0;background:linear-gradient(180deg, rgba(3,37,65,0.6), rgba(3,37,65,0.6));
+}
+.hero .container{position:relative;z-index:2}
+.hero-title{
+  font-size:2.8rem;font-weight:700;line-height:1.05;margin-bottom:1rem;text-shadow:0 6px 20px rgba(2,6,23,0.6)
+}
+.hero-sub{font-size:1.125rem;max-width:620px;margin-bottom:1.5rem;opacity:0.95}
+.hero-cta .btn{padding:0.75rem 1.25rem}
+
+.services{margin-top:40px}
+.service-card{background:#fff;border-radius:12px;padding:28px;box-shadow:0 20px 40px rgba(2,6,23,0.08);transition:transform .45s cubic-bezier(.2,.9,.2,1),box-shadow .45s;display:flex;flex-direction:column;align-items:flex-start}
+.service-icon{font-size:36px;margin-bottom:12px}
+.service-card h3{margin-bottom:8px}
+.service-card p{flex:1;color:#556}
+.service-card .btn{align-self:flex-start}
+.service-card:hover{transform:translateY(-14px);box-shadow:0 30px 60px rgba(2,6,23,0.12)}
+
+/* subtle animated entrance */
+.animated-card{opacity:0;transform:translateY(18px) scale(.995);transition:all .7s ease-out}
+.animated-card.visible{opacity:1;transform:translateY(0) scale(1)}
+
+.market-banner{background:linear-gradient(90deg,#0b2230,#07202a);color:#fff;border-radius:10px;padding:18px;margin-top:40px}
+.market-left .market-index{font-size:.9rem;opacity:.85}
+.market-left .market-value{font-size:1.6rem;font-weight:700}
+.market-right .small{font-size:.85rem;opacity:.85}
+.market-right li{font-size:.95rem}
+
+@media (max-width:768px){
+  .hero-title{font-size:1.9rem}
+  .market-right{display:none}
+}
