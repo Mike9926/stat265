@@ -1,2 +1,16 @@
 *{box-sizing:border-box}
-body{font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;background:#f6fbff}
+:root{
+	--bg:#041426;
+	--card:#07233a;
+	--muted:#9fb3c9;
+	--accent:#0ea5e9;
+	--glass: rgba(255,255,255,0.03);
+}
+body{font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;background:linear-gradient(180deg,#020813 0%, #031a2b 100%);color:#e6eef7}
+a{color:inherit}
+.container{max-width:1100px;margin:0 auto;padding:0 1rem}
+.card{background:var(--card);border-radius:12px;padding:16px}
+.muted{color:var(--muted)}
+.btn-primary{background:var(--accent);color:#042c45;padding:10px 14px;border-radius:8px;border:none}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:#cfe8ff;padding:10px 14px;border-radius:8px}
+

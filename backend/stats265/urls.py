@@ -23,4 +23,6 @@ urlpatterns = [
     path ('msestocks/', include('msestocks.urls')),
     # Expose a short API path for the frontend dev server (Vite) proxy
     path('api/market-summary/', msestocks_api.market_summary),
+    path('api/stocks/', msestocks_api.stocks_list),
+    path('api/stocks/<int:id>/', msestocks_api.stock_detail_api),
 ]
