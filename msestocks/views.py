@@ -7,6 +7,7 @@ from datetime import datetime
 from django.utils import timezone
 from django.http import JsonResponse
 from django.db.models import fields
+from django.views.decorators.http import require_GET
 
 
 def update_stock_data():
@@ -52,23 +53,38 @@ def update_stock_data():
 
 
 def stock_list(request):
-    update_stock_data()
+    # Only trigger a live scrape when explicitly requested to avoid
+    # making an external request on every page load.
+    if request.GET.get('update') == '1':
+        update_stock_data()
 
-    # Fetch stock data from the database
-    stocks = Stock.objects.all()
-    popular_stocks = stocks[:5]  # Adjust as necessary to get the popular stocks
-    actives_stocks = stocks[:4]  # Placeholder, replace with actual logic
-    gainers_stocks = stocks.filter(percent_change__gt=0)[:4]
-    losers_stocks = stocks.filter(percent_change__lt=0)[:4]
-    watchlist_stocks = stocks[:4]  # Placeholder, replace with actual logic
+    # Search
+    q = request.GET.get('q', '').strip()
+    stocks_qs = Stock.objects.all().order_by('-current_volume', 'symbol')
+    if q:
+        stocks_qs = stocks_qs.filter(symbol__icontains=q)
+
+    # simple selections for the sidebar / highlights
+    popular_stocks = Stock.objects.all().order_by('-current_volume')[:5]
+    actives_stocks = Stock.objects.all().order_by('-current_volume')[:4]
+    gainers_stocks = Stock.objects.filter(percent_change__gt=0).order_by('-percent_change')[:4]
+    losers_stocks = Stock.objects.filter(percent_change__lt=0).order_by('percent_change')[:4]
+    watchlist_stocks = Stock.objects.all().order_by('-percent_change')[:4]
+
+    # Pagination
+    from django.core.paginator import Paginator
+    paginator = Paginator(stocks_qs, 12)  # 12 items per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'stocks': stocks,
+        'page_obj': page_obj,
         'popular_stocks': popular_stocks,
         'actives_stocks': actives_stocks,
         'gainers_stocks': gainers_stocks,
         'losers_stocks': losers_stocks,
         'watchlist_stocks': watchlist_stocks,
+        'q': q,
     }
 
     return render(request, 'msestocks/index.html', context)
@@ -84,3 +100,31 @@ def stock_detail(request, id):
     }
 
     return render(request, 'msestocks/stock_detail.html', context)
+
+
+@require_GET
+def stock_data(request, id):
+    """Return historical OHLCV data for a stock as JSON.
+
+    We don't assume intraday granularity exists; high/low are approximated
+    when only open/close are available.
+    """
+    stock = get_object_or_404(Stock, id=id)
+    qs = stock.historical_data.all().order_by('timestamp')
+
+    series = []
+    for row in qs:
+        open_p = getattr(row, 'open_price', None) or 0.0
+        close_p = getattr(row, 'close_price', None) or 0.0
+        high_p = max(open_p, close_p)
+        low_p = min(open_p, close_p)
+        series.append({
+            'time': row.timestamp.isoformat(),
+            'open': open_p,
+            'high': high_p,
+            'low': low_p,
+            'close': close_p,
+            'volume': getattr(row, 'volume', 0),
+        })
+
+    return JsonResponse(series, safe=False)

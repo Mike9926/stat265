@@ -4,20 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Stats265{% endblock %}</title>
+    <title>{% block title %}ZenovaCapital{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'msestocks/css/styles.css' %}">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css">
+    <!-- Bootstrap 5 stable CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand navbar-brand-custom" href="{% url 'msestocks:index' %}">
-                <img src="{% static 'msestocks/images/stats265logo.png' %}" alt="Stats265 Logo" width="145" height="40">
+            <a class="navbar-brand navbar-brand-custom d-flex align-items-center" href="{% url 'msestocks:index' %}">
+                <img src="{% static 'msestocks/images/zenova_logo.png' %}" alt="ZenovaCapital Logo" width="145" height="40">
+                <span class="ms-2 brand-name">ZenovaCapital</span>
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
@@ -57,7 +58,10 @@
                 {% endfor %}
             </div>
             <div class="search-bar">
-                <input type="text" class="form-control" placeholder="Search stocks, ETFs, & more">
+                <form method="get" action="{% url 'msestocks:index' %}" class="d-flex" role="search">
+                    <input name="q" value="{{ q|default:'' }}" class="form-control me-2" type="search" placeholder="Search stocks, ETFs, & more" aria-label="Search">
+                    <button class="btn btn-light" type="submit">Search</button>
+                </form>
             </div>
         </div>
     </div>
@@ -66,8 +70,7 @@
         {% block content %}{% endblock %}
     </div>
 
-    <!-- Bootstrap JS and Popper.js (optional) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap JS bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

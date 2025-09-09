@@ -1,6 +1,6 @@
-# Stats265: Easy Access to Key Data for Malawi
+# ZenovaCapital: Easy Access to Key Market Data
 
-Welcome to Stats265, a project dedicated to simplifying access to essential data for Malawi. Our mission is to provide a user-friendly platform for retrieving and analyzing key statistics that contribute to the understanding and development of Malawi.
+Welcome to ZenovaCapital, a project dedicated to simplifying access to essential market data and financial insights. Our mission is to provide a user-friendly platform for retrieving and analyzing market information to support insightful analysis.
 
 ## Key Features
 

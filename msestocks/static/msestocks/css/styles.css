@@ -1,0 +1,50 @@
+:root{
+	--zenova-navy: #325061;
+	--zenova-peach: #E9C7AF;
+	--zenova-neutral: #f7f7f7;
+	--zenova-accent: #417690;
+}
+
+body{
+	background: var(--zenova-neutral);
+	color: #222;
+}
+
+.navbar-brand-custom img{
+	border-radius: 6px;
+}
+
+.navbar-dark{
+	background-color: var(--zenova-navy) !important;
+}
+
+.brand-name{
+	color: white;
+	font-weight: 600;
+	font-size: 1.05rem;
+}
+
+.top-bar{
+	background: linear-gradient(90deg, var(--zenova-navy), var(--zenova-accent));
+}
+
+.card{
+	border-radius: 8px;
+	box-shadow: 0 1px 6px rgba(50,80,100,0.06);
+}
+
+.btn-zenova{
+	background: var(--zenova-peach);
+	color: var(--zenova-navy);
+	border: 1px solid rgba(0,0,0,0.04);
+}
+
+.badge-zenova{
+	background: var(--zenova-navy);
+	color: white;
+}
+
+/* responsive tweaks */
+@media (max-width: 768px){
+	.brand-name{ display:none; }
+}

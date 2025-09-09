@@ -14,6 +14,48 @@
                     <canvas id="marketChart"></canvas>
                 </div>
             </div>
+            <div class="row">
+                {% for stock in page_obj %}
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ stock.symbol }}</h5>
+                            <p class="mb-1 {% if stock.percent_change > 0 %}text-success{% else %}text-danger{% endif %}">{{ stock.percent_change }}%</p>
+                            <p class="mb-2 small text-muted">Price: {{ stock.current_close_price|floatformat:2 }}</p>
+                            <a href="{% url 'msestocks:stock-detail' stock.id %}" class="mt-auto btn btn-sm btn-primary">View</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12"><p>No stocks found.</p></div>
+                {% endfor %}
+            </div>
+            <!-- Pagination -->
+            <nav aria-label="Stock list pagination">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ q }}&page={{ page_obj.previous_page_number }}" aria-label="Previous">&laquo;</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item {% if num == page_obj.number %}active{% endif %}">
+                        <a class="page-link" href="?q={{ q }}&page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ q }}&page={{ page_obj.next_page_number }}" aria-label="Next">&raquo;</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
         </div>
         <div class="col-md-4">
             <div class="card mb-4">
@@ -23,7 +65,7 @@
                         {% for stock in watchlist_stocks %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <a href="{% url 'msestocks:stock-detail' stock.id %}">{{ stock.symbol }}</a>
-                            <span class="badge {% if stock.percent_change > 0 %}badge-success{% else %}badge-danger{% endif %} badge-pill">
+                            <span class="badge bg-{% if stock.percent_change > 0 %}success{% else %}danger{% endif %} rounded-pill">
                                 {% if stock.percent_change > 0 %}↑{% else %}↓{% endif %}{{ stock.percent_change }}%
                             </span>
                         </li>
