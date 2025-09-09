@@ -41,3 +41,22 @@ def market_summary(request):
     }
 
     return Response(data)
+
+
+@api_view(['GET'])
+def stocks_list(request):
+    """Return a compact list of stocks for market pages."""
+    qs = Stock.objects.all().order_by('-current_volume')
+    data = list(qs.values('id','symbol','current_close_price','percent_change','current_volume')[:200])
+    return Response(data)
+
+
+@api_view(['GET'])
+def stock_detail_api(request, id):
+    s = Stock.objects.filter(id=id).values('id','symbol','current_close_price','current_open_price','percent_change','current_volume','current_turnover').first()
+    if not s:
+        return Response({'detail':'Not found'}, status=404)
+    # attach simple historical series (timestamps and close)
+    series = list(s and Stock.objects.get(id=id).historical_data.all().order_by('timestamp').values('timestamp','close_price')[:500])
+    s['historical'] = series
+    return Response(s)
